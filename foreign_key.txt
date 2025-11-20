@@ -1,0 +1,85 @@
+use constr;
+create table idea_course(corname varchar(50) primary key);	
+create table students_enroll (stuid int primary key,firstname varchar(40)
+,corsename varchar(10));
+insert into idea_course values ('data'),('engg'),('ai');
+insert into students_enroll values(11,'renu','data'),(12,'ritu','engg'),(13,'sahil','ai');
+-- want to insert the new record
+insert into student_enroll values(14,'amit','data'),(15,'tushar','java'),(16,'manya','python'),
+(17,'mohit','sql');
+select * from students_enroll;
+select * from idea_course;
+delete from idea_course
+where corname='data';
+
+
+
+create table idea_course1(corname varchar(50) primary key);
+create table students_enroll1 
+(stuid int primary key,firstname varchar(40),
+corsename varchar(10),
+FOREIGN KEY (corsename)
+ REFERENCES idea_course1(corname)
+);
+desc students_enroll1;
+insert into idea_course1 values ('data'),('engg'),('ai');
+insert into students_enroll1 values(11,'renu','data'),(12,'ritu','engg'),(13,'sahil','ai');
+-- want to insert the new record "give error"
+insert into students_enroll1 values
+(14,'amit','data'),(15,'tushar','java'),(16,'manya','python');
+insert into idea_course1 values ('java'),('PYTHON');
+
+-- now try to inser in child table
+insert into students_enroll1 values
+(14,'amit','data'),(15,'tushar','java'),(16,'manya','python');
+select * from students_enroll1;
+select * from idea_course1;
+-- want to delete the row from idea "give error"
+delete from idea_course1
+where corname='data';
+-- Steps to Alter Foreign Key
+-- Drop the Existing Foreign Key Constraint
+-- Use the ALTER TABLE statement to drop the current foreign key.
+
+-- Add the New Foreign Key with CASCADE Options
+-- Recreate the foreign key with ON UPDATE CASCADE and ON DELETE CASCADE.
+
+ALTER TABLE students_enroll1
+DROP constraint  students_enroll1_ibfk_1;
+
+-- Step 2: Add the new foreign key with CASCADE options
+ALTER TABLE students_enroll1
+ADD CONSTRAINT fk_1
+FOREIGN KEY (corsename)
+REFERENCES idea_course1(corname)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+select * from students_enroll1;
+select * from idea_course1;
+-- want to delete the row from idea "give no error"
+delete from idea_course1
+where corname='data';
+
+select * from idea_course1;
+select * from students_enroll1;
+
+ALTER TABLE students_enroll1
+DROP constraint fk_1;
+
+ALTER TABLE students_enroll1
+ADD CONSTRAINT fk_1
+FOREIGN KEY (corsename)
+REFERENCES idea_course1(corname)
+ON DELETE  set   null;
+
+delete from idea_course1
+where corname='ai';
+
+select * from idea_course1;
+select * from students_enroll1;
+
+
+select * from students_enroll1
+where corsename is null;
+
